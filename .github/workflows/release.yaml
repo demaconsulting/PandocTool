@@ -1,0 +1,75 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      wrapper:
+        description: 'Wrapper version (0.1.0-alpha.1)'
+        required: true
+      pandoc:
+        description: 'Pandoc version (3.1.12.2)'
+        required: true
+      version:
+        description: 'Release version (1.2.3-rc.4)'
+        required: true
+
+jobs:
+  release:
+  
+    permissions:
+      contents: write
+      packages: write
+
+    runs-on: ubuntu-latest
+    
+    steps:
+    
+      - uses: actions/checkout@v4
+
+      - uses: nuget/setup-nuget@v2
+        with:
+          nuget-version: '6.x'
+
+      - name: Insert Wrapper
+        run: |
+          wget https://github.com/demaconsulting/DotnetToolWrapper/releases/download/${{ github.event.inputs.wrapper }}/DotnetToolWrapper.zip
+          unzip -o DotnetToolWrapper.zip -d pack/tools/net6.0/any
+
+      - name: Insert Pandoc win-x64
+        run: |
+          wget https://github.com/jgm/pandoc/releases/download/${{ github.event.inputs.pandoc }}/pandoc-${{ github.event.inputs.pandoc }}-windows-x86_64.zip -O pandoc-win-x64.zip
+          mkdir pandoc-win-x64
+          unzip pandoc-win-x64.zip -d pandoc-win-x64
+          mkdir pack/tools/net6.0/any/win-x64
+          cp pandoc-win-x64/*/* pack/tools/net6.0/any/win-x64
+          mkdir pack/docs
+          mv pack/tools/net6.0/any/win-x64/COPYING.* pack/docs
+          mv pack/tools/net6.0/any/win-x64/COPYRIGHT.* pack/docs
+          mv pack/tools/net6.0/any/win-x64/MANUAL.* pack/docs
+
+      - name: Insert Pandoc linux-x64
+        run: |
+          wget https://github.com/jgm/pandoc/releases/download/${{ github.event.inputs.pandoc }}/pandoc-${{ github.event.inputs.pandoc }}-linux-amd64.tar.gz -O pandoc-linux-x64.tar.gz
+          mkdir pandoc-linux-x64
+          tar -xzvf pandoc-linux-x64.tar.gz -C pandoc-linux-x64
+          mkdir pack/tools/net6.0/any/linux-x64
+          cp pandoc-linux-x64/*/bin/pandoc pack/tools/net6.0/any/linux-x64
+
+      - name: Create Dotnet Tool
+        run: |
+          cd pack
+          nuget pack -Version ${{ github.event.inputs.version }}
+
+      - name: Create release
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: pack/*.nupkg
+          generateReleaseNotes: true
+          tag: ${{ github.event.inputs.version }}
+
+      - name: Publish to Nuget
+        run: >
+          dotnet nuget push
+          pack/*.nupkg
+          --source "https://api.nuget.org/v3/index.json"
+          --api-key "${{ secrets.DEMACONSULTINGNUGETKEY }}"

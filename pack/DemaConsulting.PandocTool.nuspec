@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+    <metadata>
+        <id>DemaConsulting.PandocTool</id>
+        <version>0.0.0</version>
+        <title>Pandoc Dotnet Tool</title>
+        <authors>Dema Consulting</authors>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <license type="expression">GPL-2.0-or-later</license>
+        <readme>docs/README.md</readme>
+        <projectUrl>https://github.com/demaconsulting/PandocTool</projectUrl>
+        <description>Dotnet Tool Wrapper for Pandoc</description>
+        <copyright>Dema Consulting</copyright>
+        <tags>pandoc</tags>
+        <repository type="git" url="https://github.com/demaconsulting/PandocTool.git" />
+        <packageTypes>
+            <packageType name="DotnetTool" />
+        </packageTypes>
+    </metadata>
+    <files>
+        <file src="../README.md" target="docs/README.md" />
+        <file src="docs/**/*" target="docs" />
+        <file src="tools/**/*" target="tools" />
+    </files>
+</package>
