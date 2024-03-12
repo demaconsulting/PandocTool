@@ -8,6 +8,7 @@
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <license type="expression">GPL-2.0-or-later</license>
         <readme>docs/README.md</readme>
+        <icon>docs/Icon.png</icon>
         <projectUrl>https://github.com/demaconsulting/PandocTool</projectUrl>
         <description>Dotnet Tool Wrapper for Pandoc</description>
         <copyright>Dema Consulting</copyright>
@@ -19,6 +20,7 @@
     </metadata>
     <files>
         <file src="../README.md" target="docs/README.md" />
+        <file src="../Icon.png" target="docs/Icon.png" />
         <file src="docs/**/*" target="docs" />
         <file src="tools/**/*" target="tools" />
     </files>

@@ -5,7 +5,7 @@
 
 # About
 
-PandocTool is the [Pandoc](https://pandoc.org/) universal document converter packaged as a Dotnet tool.
+PandocTool is a repackaging of the [Pandoc](https://pandoc.org/) Universal Document Converter as a [Dotnet tool](https://learn.microsoft.com/en-us/dotnet/core/tools/global-tools).
 
 Pandoc is already available in numerous formats for [installation](https://pandoc.org/installing.html).
 Packaging it as a Dotnet tool allows for multiple versions to be installed and cached on a system
