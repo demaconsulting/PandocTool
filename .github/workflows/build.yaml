@@ -1,0 +1,93 @@
+on:
+  workflow_call:
+    inputs:
+      wrapper:
+        required: true
+        type: string
+      pandoc:
+        required: true
+        type: string
+      version:
+        required: true
+        type: string
+
+jobs:
+  build:
+  
+    runs-on: ubuntu-latest
+    
+    steps:
+
+    - uses: actions/checkout@v4
+
+    - name: Setup dotnet 6/8
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: |
+          6.x
+          8.x          
+
+    - uses: nuget/setup-nuget@v2
+      with:
+        nuget-version: '6.x'
+
+    - name: Restore Tools
+      run: >
+        dotnet tool restore
+
+    - name: Insert Wrapper
+      run: |
+        wget https://github.com/demaconsulting/DotnetToolWrapper/releases/download/${{ inputs.wrapper }}/manifest.spdx.json
+        wget https://github.com/demaconsulting/DotnetToolWrapper/releases/download/${{ inputs.wrapper }}/DotnetToolWrapper.zip
+        unzip -o DotnetToolWrapper.zip -d DotnetToolWrapper
+        cp DotnetToolWrapper/net6.0/*.* pack/tools/net6.0/any
+        cp DotnetToolWrapper/net8.0/*.* pack/tools/net8.0/any
+
+    - name: Insert Pandoc win-x64
+      run: |
+        wget https://github.com/jgm/pandoc/releases/download/${{ inputs.pandoc }}/pandoc-${{ inputs.pandoc }}-windows-x86_64.zip -O pandoc-win-x64.zip
+        mkdir pandoc-win-x64
+        unzip pandoc-win-x64.zip -d pandoc-win-x64
+        mkdir pack/win-x64
+        cp pandoc-win-x64/*/* pack/win-x64
+        mkdir pack/docs
+        mv pack/win-x64/COPYING.* pack/docs
+        mv pack/win-x64/COPYRIGHT.* pack/docs
+        mv pack/win-x64/MANUAL.* pack/docs
+
+    - name: Insert Pandoc linux-x64
+      run: |
+        wget https://github.com/jgm/pandoc/releases/download/${{ inputs.pandoc }}/pandoc-${{ inputs.pandoc }}-linux-amd64.tar.gz -O pandoc-linux-x64.tar.gz
+        mkdir pandoc-linux-x64
+        tar -xzvf pandoc-linux-x64.tar.gz -C pandoc-linux-x64
+        mkdir pack/linux-x64
+        cp pandoc-linux-x64/*/bin/pandoc pack/linux-x64
+
+    - name: Generate SBOM
+      run: >
+        dotnet sbom-tool generate
+        -b pack
+        -pn DemaConsulting.PandocTool
+        -pv ${{ inputs.version }}
+        -ps DemaConsulting
+        -nsb https://DemaConsulting.com/PandocTool
+        -li true
+        -pm true
+
+    - name: Enhance SBOM
+      shell: bash
+      run: |
+        dotnet spdx-tool run-workflow spdx-workflow.yaml pandoc-version=${{ inputs.pandoc }}
+
+    - name: Create Dotnet Tool
+      run: |
+        cd pack
+        nuget pack -Version ${{ inputs.version }}
+
+    - name: Upload Artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: build-artifacts
+        path: |
+          pack/*.nupkg
+          pack/_manifest/spdx_2.2/*.*
