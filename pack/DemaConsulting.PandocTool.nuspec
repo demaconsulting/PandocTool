@@ -23,5 +23,7 @@
         <file src="../Icon.png" target="docs/Icon.png" />
         <file src="docs/**/*" target="docs" />
         <file src="tools/**/*" target="tools" />
+        <file src="win-x64/**/*" target="win-x64" />
+        <file src="linux-x64/**/*" target="linux-x64" />
     </files>
 </package>

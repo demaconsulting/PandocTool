@@ -1,0 +1,124 @@
+# This workflow annotates the SBOM for the DemaConsulting.PandocTool with
+# build tools, and generates a summary markdown.
+
+
+# Workflow Parameters
+parameters:
+  spdx: pack/_manifest/spdx_2.2/manifest.spdx.json
+  md: pack/_manifest/spdx_2.2/sbom_summary.md
+  wrapper-spdx: manifest.spdx.json
+  pandoc-version: 0.0.0
+
+# Steps
+steps:
+
+  # Get the PandocTool version
+- command: get-version
+  displayName: Get PandocTool Version
+  inputs:
+    output: cc-version
+    spdx: ${{ spdx }}
+    name: DemaConsulting.PandocTool
+
+
+  # Rename the Root Package ID
+- command: rename-id
+  displayName: Rename PandocTool Package ID
+  inputs:
+    spdx: ${{ spdx }}
+    old: SPDXRef-RootPackage
+    new: SPDXRef-DemaConsulting-PandocTool-${{ pandoctool-version }}
+
+
+  # Copy DotnetToolWrapper
+- command: copy-package
+  inputs:
+    from: ${{ wrapper-spdx }}
+    to: ${{ spdx }}
+    package: SPDXRef-DemaConsulting-DotnetToolWrapper
+    recursive: true
+    relationships:
+    - type: CONTAINED_BY
+      element: SPDXRef-DemaConsulting-PandocTool-${{ pandoctool-version }}
+      comment: DotnetToolWrapper embedded into DemaConsulting.PandocTool 
+
+
+  # Add Pandoc Package
+- command: add-package
+  inputs:
+    spdx: ${{ spdx }}
+    package:
+      id: SPDXRef-Package-Pandoc-${{ pandoc-version }}
+      name: Pandoc
+      download: NOASSERTION
+      version: ${{ pandoc-version }}
+      filename: NOASSERTION
+      supplier: NOASSERTION
+      originator: NOASSERTION
+      homepage: https://pandoc.org/
+      copyright: "Copyright (C) 2006-2024 John MacFarlane <jgm at berkeley dot edu>"
+      summary: "Universal markup converter"
+      license: GPL-2.0-only
+      purl: pkg:github/jgm/pandoc@${{ pandoc-version }}
+    relationships:
+    - type: CONTAINED_BY
+      element: SPDXRef-DemaConsulting-PandocTool-${{ pandoctool-version }}
+      comment: Pandoc ${{ pandoc-version }} embedded into DemaConsulting.PandocTool 
+
+
+  # Query the version of nuget
+- command: run-workflow
+  displayName: Query Nuget Version
+  inputs:
+    url: https://raw.githubusercontent.com/demaconsulting/SpdxWorkflows/main/GetNugetVersion.yaml
+    outputs:
+      version: nuget-version
+
+
+  # Add Nuget Package
+- command: run-workflow
+  displayName: Add Nuget Package
+  inputs:
+    url: https://raw.githubusercontent.com/demaconsulting/SpdxWorkflows/main/AddNugetPackage.yaml
+    parameters:
+      spdx: ${{ spdx }}
+      version: ${{ nuget-version }}
+      id: SPDXRef-Package-Nuget-${{ nuget-version }}
+
+
+  # Add Nuget Relationship
+- command: add-relationship
+  displayName: Add Nuget Relationship
+  inputs:
+    spdx: ${{ spdx }}
+    id: SPDXRef-Package-Nuget-${{ nuget-version }}
+    relationships:
+    - type: BUILD_TOOL_OF
+      element: SPDXRef-DemaConsulting-PandocTool-${{ pandoctool-version }}
+      comment: Nuget ${{ nuget-version }} used to package DemaConsulting.PandocTool
+
+
+  # Update the SBOM sha256
+- command: hash
+  displayName: Update PandocTool SBOM sha256
+  inputs:
+    operation: generate
+    algorithm: sha256
+    file: ${{ spdx }}
+
+
+  # Validate the SBOM
+- command: validate
+  displayName: Validate PandocTool SBOM
+  inputs:
+    spdx: ${{ spdx }}
+    ntia: true
+
+
+  # Generate the library summary
+- command: to-markdown
+  displayName: Generate PandocTool SBOM summary
+  inputs:
+    spdx: ${{ spdx }}
+    markdown: ${{ md }}
+    title: PandocTool

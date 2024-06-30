@@ -4,49 +4,9 @@ on: [push]
 
 jobs:
   build:
-  
-    runs-on: ubuntu-latest
-
-    steps:
-
-      - uses: actions/checkout@v4
-
-      - uses: nuget/setup-nuget@v2
-        with:
-          nuget-version: '6.x'
-
-      - name: Insert Wrapper
-        run: |
-          wget https://github.com/demaconsulting/DotnetToolWrapper/releases/download/1.0.0/DotnetToolWrapper.zip
-          unzip -o DotnetToolWrapper.zip -d pack/tools/net6.0/any
-
-      - name: Insert Pandoc win-x64
-        run: |
-          wget https://github.com/jgm/pandoc/releases/download/3.1.12.2/pandoc-3.1.12.2-windows-x86_64.zip -O pandoc-win-x64.zip
-          mkdir pandoc-win-x64
-          unzip pandoc-win-x64.zip -d pandoc-win-x64
-          mkdir pack/tools/net6.0/any/win-x64
-          cp pandoc-win-x64/*/* pack/tools/net6.0/any/win-x64
-          mkdir pack/docs
-          mv pack/tools/net6.0/any/win-x64/COPYING.* pack/docs
-          mv pack/tools/net6.0/any/win-x64/COPYRIGHT.* pack/docs
-          mv pack/tools/net6.0/any/win-x64/MANUAL.* pack/docs
-
-      - name: Insert Pandoc linux-x64
-        run: |
-          wget https://github.com/jgm/pandoc/releases/download/3.1.12.2/pandoc-3.1.12.2-linux-amd64.tar.gz -O pandoc-linux-x64.tar.gz
-          mkdir pandoc-linux-x64
-          tar -xzvf pandoc-linux-x64.tar.gz -C pandoc-linux-x64
-          mkdir pack/tools/net6.0/any/linux-x64
-          cp pandoc-linux-x64/*/bin/pandoc pack/tools/net6.0/any/linux-x64
-
-      - name: Create Dotnet Tool
-        run: |
-          cd pack
-          nuget pack
-
-      - name: Upload asset
-        uses: actions/upload-artifact@v4
-        with:
-          name: PandocTool
-          path: pack/*.nupkg
+    name: Build Artifacts
+    uses: ./.github/workflows/build.yaml
+    with:
+      wrapper: 1.1.0
+      pandoc: 3.2.1
+      version: 0.0.0-run.${{ github.run_number }}
