@@ -16,7 +16,7 @@ steps:
 - command: get-version
   displayName: Get PandocTool Version
   inputs:
-    output: cc-version
+    output: pandoctool-version
     spdx: ${{ spdx }}
     name: DemaConsulting.PandocTool
 
