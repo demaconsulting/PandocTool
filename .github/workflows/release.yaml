@@ -69,6 +69,6 @@ jobs:
       if: ${{ inputs.publish == 'publish' }}
       run: >
         dotnet nuget push
-        pack/*.nupkg
+        build-artifacts/*.nupkg
         --source "https://api.nuget.org/v3/index.json"
         --api-key "${{ secrets.DEMACONSULTINGNUGETKEY }}"
