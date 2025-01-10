@@ -8,5 +8,5 @@ jobs:
     uses: ./.github/workflows/build.yaml
     with:
       wrapper: 1.1.0
-      pandoc: 3.2.1
+      pandoc: 3.6.1
       version: 0.0.0-run.${{ github.run_number }}
