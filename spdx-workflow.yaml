@@ -66,36 +66,36 @@ steps:
       comment: Pandoc ${{ pandoc-version }} embedded into DemaConsulting.PandocTool 
 
 
-  # Query the version of nuget
+  # Query for DotNet version
 - command: run-workflow
-  displayName: Query Nuget Version
+  displayName: Query DotNet Version
   inputs:
-    url: https://raw.githubusercontent.com/demaconsulting/SpdxWorkflows/main/GetNugetVersion.yaml
+    url: https://raw.githubusercontent.com/demaconsulting/SpdxWorkflows/main/GetDotNetVersion.yaml
     outputs:
-      version: nuget-version
+      version: dotnet-version
 
 
-  # Add Nuget Package
+  # Add DotNet Package
 - command: run-workflow
-  displayName: Add Nuget Package
+  displayName: Add DotNet Package
   inputs:
-    url: https://raw.githubusercontent.com/demaconsulting/SpdxWorkflows/main/AddNugetPackage.yaml
+    url: https://raw.githubusercontent.com/demaconsulting/SpdxWorkflows/main/AddDotNetPackage.yaml
     parameters:
       spdx: ${{ spdx }}
-      version: ${{ nuget-version }}
-      id: SPDXRef-Package-Nuget-${{ nuget-version }}
+      version: ${{ dotnet-version }}
+      id: SPDXRef-Package-DotNet-${{ dotnet-version }}
 
 
-  # Add Nuget Relationship
+  # Add DotNet Relationship
 - command: add-relationship
-  displayName: Add Nuget Relationship
+  displayName: Add DotNet Relationship
   inputs:
     spdx: ${{ spdx }}
-    id: SPDXRef-Package-Nuget-${{ nuget-version }}
+    id: SPDXRef-Package-DotNet-${{ dotnet-version }}
     relationships:
     - type: BUILD_TOOL_OF
       element: SPDXRef-DemaConsulting-PandocTool-${{ pandoctool-version }}
-      comment: Nuget ${{ nuget-version }} used to package DemaConsulting.PandocTool
+      comment: DotNet ${{ dotnet-version }} used to package DemaConsulting.PandocTool
 
 
   # Update the SBOM sha256

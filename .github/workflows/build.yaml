@@ -14,22 +14,17 @@ on:
 jobs:
   build:
   
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     
     steps:
 
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
 
-    - name: Setup dotnet 6/8
-      uses: actions/setup-dotnet@v4
+    - name: Setup dotnet
+      uses: actions/setup-dotnet@v5
       with:
         dotnet-version: |
-          6.x
-          8.x          
-
-    - uses: nuget/setup-nuget@v2
-      with:
-        nuget-version: latest
+          10.x
 
     - name: Restore Tools
       run: >
@@ -40,8 +35,9 @@ jobs:
         wget https://github.com/demaconsulting/DotnetToolWrapper/releases/download/${{ inputs.wrapper }}/manifest.spdx.json
         wget https://github.com/demaconsulting/DotnetToolWrapper/releases/download/${{ inputs.wrapper }}/DotnetToolWrapper.zip
         unzip -o DotnetToolWrapper.zip -d DotnetToolWrapper
-        cp DotnetToolWrapper/net6.0/*.* pack/tools/net6.0/any
         cp DotnetToolWrapper/net8.0/*.* pack/tools/net8.0/any
+        cp DotnetToolWrapper/net9.0/*.* pack/tools/net9.0/any
+        cp DotnetToolWrapper/net10.0/*.* pack/tools/net10.0/any
 
     - name: Insert Pandoc win-x64
       run: |
@@ -82,10 +78,10 @@ jobs:
     - name: Create Dotnet Tool
       run: |
         cd pack
-        nuget pack -Version ${{ inputs.version }}
+        dotnet pack DemaConsulting.PandocTool.csproj -p:Version=${{ inputs.version }} -o .
 
     - name: Upload Artifacts
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       with:
         name: build-artifacts
         path: |
