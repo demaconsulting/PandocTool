@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
     <metadata>
         <id>DemaConsulting.PandocTool</id>
-        <version>0.0.0</version>
+        <version>$version$</version>
         <title>Pandoc Dotnet Tool</title>
         <authors>Dema Consulting</authors>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>

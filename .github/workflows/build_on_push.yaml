@@ -7,6 +7,6 @@ jobs:
     name: Build Artifacts
     uses: ./.github/workflows/build.yaml
     with:
-      wrapper: 1.1.0
-      pandoc: 3.6.1
+      wrapper: 1.2.0
+      pandoc: 3.8.3
       version: 0.0.0-run.${{ github.run_number }}
