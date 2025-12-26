@@ -1,0 +1,47 @@
+{
+  "version": "0.2",
+  "language": "en",
+  "words": [
+    "demaconsulting",
+    "dotnet",
+    "nuget",
+    "nupkg",
+    "csproj",
+    "nuspec",
+    "cspell",
+    "markdownlint",
+    "dependabot",
+    "pandoc",
+    "sbom",
+    "spdx",
+    "amd64",
+    "nsb",
+    "GPL",
+    "COPYING",
+    "COPYRIGHT",
+    "MANUAL",
+    "github",
+    "workflows",
+    "Dema"
+  ],
+  "ignorePaths": [
+    "node_modules",
+    ".git",
+    "*.nupkg",
+    "*.zip",
+    "*.tar.gz",
+    "pack/docs",
+    "pack/win-x64",
+    "pack/linux-x64",
+    "pack/_manifest"
+  ],
+  "flagWords": [],
+  "enabledLanguageIds": [
+    "markdown",
+    "text",
+    "plaintext",
+    "yaml",
+    "yml",
+    "json"
+  ]
+}

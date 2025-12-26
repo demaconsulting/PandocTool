@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 💬 Discussions
+    url: https://github.com/demaconsulting/PandocTool/discussions
+    about: Ask questions and discuss ideas with the community
+  - name: 📚 Pandoc Documentation
+    url: https://pandoc.org/
+    about: Official Pandoc documentation and user guide
