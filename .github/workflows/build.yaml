@@ -16,6 +16,9 @@ jobs:
   
     runs-on: ubuntu-latest
     
+    permissions:
+      contents: read
+    
     steps:
 
     - uses: actions/checkout@v6
@@ -90,6 +93,9 @@ jobs:
 
   test:
     needs: build
+    
+    permissions:
+      contents: read
     
     strategy:
       matrix:
