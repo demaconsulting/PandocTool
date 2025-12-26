@@ -84,7 +84,7 @@ jobs:
         dotnet pack DemaConsulting.PandocTool.csproj -p:Version=${{ inputs.version }} -o .
 
     - name: Upload Artifacts
-      uses: actions/upload-artifact@v5
+      uses: actions/upload-artifact@v6
       with:
         name: build-artifacts
         path: |
@@ -112,7 +112,7 @@ jobs:
         dotnet-version: ${{ matrix.dotnet }}
     
     - name: Download Artifacts
-      uses: actions/download-artifact@v5
+      uses: actions/download-artifact@v7
       with:
         name: build-artifacts
         path: build-artifacts
