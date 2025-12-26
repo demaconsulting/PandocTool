@@ -12,6 +12,7 @@
     "markdownlint",
     "dependabot",
     "pandoc",
+    "pandoctool",
     "sbom",
     "spdx",
     "amd64",
@@ -22,7 +23,10 @@
     "MANUAL",
     "github",
     "workflows",
-    "Dema"
+    "Dema",
+    "NOASSERTION",
+    "Farlane",
+    "ntia"
   ],
   "ignorePaths": [
     "node_modules",
