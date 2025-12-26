@@ -57,6 +57,15 @@ The project uses a build workflow that downloads Pandoc binaries and packages th
 # Local testing can be done by examining the .github/workflows/build.yaml file
 ```
 
+The CI/CD pipeline includes:
+
+* **Quality Checks**: Spelling and markdown linting validation
+* **Build**: Package creation on ubuntu-latest
+* **Test**: Automated testing of the package on:
+  * Windows and Linux operating systems
+  * .NET versions 8, 9, and 10
+  * Verifies the packaged pandoc tool executes correctly
+
 ### Coding Standards
 
 * Follow standard C# coding conventions
