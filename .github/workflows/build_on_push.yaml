@@ -3,8 +3,28 @@ name: Build
 on: [push]
 
 jobs:
+  quality-checks:
+    name: Quality Checks
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Check Spelling
+        run: npx cspell "**/*.md" "**/*.yaml" "**/*.yml" "**/*.json"
+
+      - name: Check Markdown Linting
+        run: npx markdownlint-cli "**/*.md"
+
   build:
     name: Build Artifacts
+    needs: quality-checks
     uses: ./.github/workflows/build.yaml
     with:
       wrapper: 1.2.0
