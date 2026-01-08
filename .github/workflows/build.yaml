@@ -19,6 +19,9 @@ jobs:
     permissions:
       contents: read
     
+    outputs:
+      version: ${{ inputs.version }}
+    
     steps:
 
     - uses: actions/checkout@v6
@@ -120,10 +123,11 @@ jobs:
     - name: Install Pandoc Tool
       shell: bash
       run: |
-        dotnet tool install --global --add-source ./build-artifacts DemaConsulting.PandocTool
+        dotnet tool install --global --add-source ./build-artifacts --version ${{ needs.build.outputs.version }} DemaConsulting.PandocTool
     
     - name: Test Pandoc Tool
       shell: bash
       run: |
+        set -e
         pandoc --version
         pandoc --help
