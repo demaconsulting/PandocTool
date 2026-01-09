@@ -120,10 +120,18 @@ jobs:
     - name: Install Pandoc Tool
       shell: bash
       run: |
-        dotnet tool install --global --add-source ./build-artifacts DemaConsulting.PandocTool
+        dotnet tool install --global --add-source ./build-artifacts --version ${{ inputs.version }} DemaConsulting.PandocTool
     
-    - name: Test Pandoc Tool
+    - name: Test Pandoc Version Command
       shell: bash
       run: |
-        pandoc --version
-        pandoc --help
+        echo "Testing version command..."
+        pandoc --version || { echo "✗ Version command failed"; exit 1; }
+        echo "✓ Version command succeeded"
+    
+    - name: Test Pandoc Help Command
+      shell: bash
+      run: |
+        echo "Testing help command..."
+        pandoc --help || { echo "✗ Help command failed"; exit 1; }
+        echo "✓ Help command succeeded"
