@@ -54,7 +54,7 @@ jobs:
           10.x
 
     - name: Download Artifacts
-      uses: actions/download-artifact@v7
+      uses: actions/download-artifact@v8
       with:
         name: build-artifacts
         path: build-artifacts
