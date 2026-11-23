@@ -73,7 +73,7 @@ The project uses GitHub Actions to:
 3. Package everything as a dotnet tool
 4. Generate SBOM (Software Bill of Materials)
 5. Create a NuGet package
-6. Test the package on Windows and Linux with .NET 8, 9, and 10
+6. Test the package on Windows and Linux with .NET 8, 9, 10, and 11
 
 Local builds are not typically performed; the CI/CD pipeline handles packaging.
 
@@ -84,7 +84,7 @@ The build workflow includes automated testing:
 * **Build Job**: Runs on ubuntu-latest to create the NuGet package
 * **Test Job**: Matrix tests the package on:
   * Operating Systems: Windows and Linux
-  * .NET Versions: 8, 9, and 10
+  * .NET Versions: 8, 9, 10, and 11
   * Tests verify the packaged pandoc tool executes correctly by running `pandoc --version` and `pandoc --help`
 
 ## Documentation Standards
@@ -128,7 +128,7 @@ Dependencies are managed through:
 * **README.md URLs**: Always use absolute URLs in README.md (distributed with NuGet package)
 * **Quality Checks**: Always run spelling and markdown linting checks before completing work
 * **Link Format**: Use markdown link reference format for maintainability
-* **Compatibility**: Maintain compatibility with supported .NET versions (8, 9, 10)
+* **Compatibility**: Maintain compatibility with supported .NET versions (8, 9, 10, 11)
 * **License**: Project uses GPL-2.0-or-later license
 
 ## Resources

@@ -41,6 +41,7 @@ jobs:
         cp DotnetToolWrapper/net8.0/*.* pack/tools/net8.0/any
         cp DotnetToolWrapper/net9.0/*.* pack/tools/net9.0/any
         cp DotnetToolWrapper/net10.0/*.* pack/tools/net10.0/any
+        cp DotnetToolWrapper/net11.0/*.* pack/tools/net11.0/any
 
     - name: Insert Pandoc win-x64
       run: |
@@ -100,7 +101,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest]
-        dotnet: ['8.x', '9.x', '10.x']
+        dotnet: ['8.x', '9.x', '10.x', '11.x']
     
     runs-on: ${{ matrix.os }}
     
