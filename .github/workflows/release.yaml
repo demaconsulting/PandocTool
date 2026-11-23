@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       wrapper:
-        description: 'Wrapper version (1.3.0)'
+        description: 'Wrapper version (1.4.0)'
         required: true
         type: string
       pandoc:
@@ -35,9 +35,11 @@ jobs:
       version: ${{ inputs.version }}
 
   release:
+    environment: release
     permissions:
       contents: write
       packages: write
+      id-token: write  # lets GitHub issue the token NuGet checks
 
     runs-on: ubuntu-latest
     
@@ -67,10 +69,17 @@ jobs:
         generateReleaseNotes: true
         tag: ${{ github.event.inputs.version }}
 
+    - name: NuGet login
+      if: ${{ inputs.publish == 'publish' }}
+      id: nuget-login
+      uses: NuGet/login@v1
+      with:
+        user: ${{ secrets.NUGET_USER }}  # your nuget.org profile name, not your email address
+
     - name: Publish to Nuget
       if: ${{ inputs.publish == 'publish' }}
       run: >
         dotnet nuget push
         build-artifacts/*.nupkg
         --source "https://api.nuget.org/v3/index.json"
-        --api-key "${{ secrets.DEMACONSULTINGNUGETKEY }}"
+        --api-key "${{ steps.nuget-login.outputs.NUGET_API_KEY }}"

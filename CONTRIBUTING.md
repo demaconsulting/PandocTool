@@ -63,7 +63,7 @@ The CI/CD pipeline includes:
 * **Build**: Package creation on ubuntu-latest
 * **Test**: Automated testing of the package on:
   * Windows and Linux operating systems
-  * .NET versions 8, 9, and 10
+  * .NET versions 8, 9, 10, and 11
   * Verifies the packaged pandoc tool executes correctly
 
 ### Coding Standards

@@ -60,7 +60,7 @@ body:
     attributes:
       label: .NET Version
       description: Which version of .NET are you using?
-      placeholder: e.g., 8.0, 9.0, 10.0
+      placeholder: e.g., 8.0, 9.0, 10.0, 11.0
     validations:
       required: true
 
