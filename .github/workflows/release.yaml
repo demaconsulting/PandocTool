@@ -6,6 +6,7 @@ on:
       wrapper:
         description: 'Wrapper version (1.4.0)'
         required: true
+        default: '1.4.0'
         type: string
       pandoc:
         description: 'Pandoc version (3.8.3)'
