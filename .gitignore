@@ -1,1 +1,4 @@
 *.bak
+
+# Agent working logs (transient, never committed)
+.agent-logs/
